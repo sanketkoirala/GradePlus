@@ -1,36 +1,101 @@
+body {
+  font-family: 'Roboto', sans-serif;
+  background-color: #f4f4f9;
+  color: #333;
+}
+
 .grade-calculator {
-  width: 300px;
-  margin: 0 auto;
+  width: 400px;
+  margin: 50px auto;
+  padding: 20px;
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.1);
+}
+
+.grade-calculator h2 {
   text-align: center;
-}
-
-.grade-calculator form {
   margin-bottom: 20px;
+  color: #007bff;
+  font-weight: bold;
 }
 
-.grade-calculator div {
-  margin-bottom: 10px;
+.form-group {
+  margin-bottom: 15px;
 }
 
-.grade-calculator input {
-  padding: 5px;
+input[type="text"],
+input[type="number"] {
   width: 100%;
+  padding: 12px;
+  margin-top: 5px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-sizing: border-box;
+  font-size: 16px;
+  transition: border-color 0.3s ease;
 }
 
-.grade-calculator button {
-  padding: 10px;
-  width: 100%;
-  background-color: #007bff;
+input[type="text"]:focus,
+input[type="number"]:focus {
+  border-color: #007bff;
+}
+
+button.btn-primary,
+button.btn-add {
+  display: inline-block;
+  padding: 15px 25px;
+  font-size: 18px;
   color: white;
   border: none;
   border-radius: 5px;
   cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  margin: 10px 0;
 }
 
-.grade-calculator button:hover {
+button.btn-primary {
+  background-color: #007bff;
+}
+
+button.btn-add {
+  background-color: #28a745;
+}
+
+button.btn-primary:hover {
   background-color: #0056b3;
 }
 
-.grade-calculator h3 {
+button.btn-add:hover {
+  background-color: #218838;
+}
+
+button.btn-primary:focus,
+button.btn-add:focus {
+  outline: none;
+}
+
+button:active {
+  transform: scale(0.98);
+}
+
+.button-container {
+  text-align: center;
+}
+
+.step {
+  margin-bottom: 30px;
+}
+
+.syllabus-item {
+  background-color: #f9f9f9;
+  padding: 15px;
+  margin-bottom: 10px;
+  border-radius: 5px;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.05);
+}
+
+.highlight {
   color: #28a745;
+  font-weight: bold;
 }
