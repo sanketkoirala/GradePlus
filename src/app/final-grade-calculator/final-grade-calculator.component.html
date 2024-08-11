@@ -1,0 +1,81 @@
+<div class="grade-calculator">
+  <h2>Final Exam Grade Calculator</h2>
+
+  <!-- Ask for the class name -->
+  <div *ngIf="!classNameSelected">
+    <label for="className">Enter Class Name:</label>
+    <input
+      type="text"
+      id="className"
+      [(ngModel)]="className"
+      name="className"
+      required
+    />
+    <button (click)="onClassNameSubmit()">Submit</button>
+  </div>
+
+  <!-- Add syllabus items -->
+  <div *ngIf="classNameSelected && !finalExamEntered">
+    <h3>{{ className }}</h3>
+
+    <div *ngFor="let item of syllabusItems; let i = index">
+      <div>
+        <label for="itemName{{ i }}">Item Name:</label>
+        <input
+          type="text"
+          id="itemName{{ i }}"
+          [(ngModel)]="syllabusItems[i].name"
+          name="itemName{{ i }}"
+          required
+        />
+      </div>
+      <div>
+        <label for="itemGrade{{ i }}">Grade Received:</label>
+        <input
+          type="number"
+          id="itemGrade{{ i }}"
+          [(ngModel)]="syllabusItems[i].grade"
+          name="itemGrade{{ i }}"
+          required
+        />
+      </div>
+      <div>
+        <label for="itemWeight{{ i }}">Item Weight (%):</label>
+        <input
+          type="number"
+          id="itemWeight{{ i }}"
+          [(ngModel)]="syllabusItems[i].weight"
+          name="itemWeight{{ i }}"
+          required
+        />
+        <br />
+        <br />
+      </div>
+    </div>
+
+    <div>
+      <label for="finalExamWeight">Final Exam Weight (%):</label>
+      <input
+        type="number"
+        id="finalExamWeight"
+        [(ngModel)]="finalExamWeight"
+        name="finalExamWeight"
+        required
+      />
+    </div>
+    <button (click)="addSyllabusItem()">Add Syllabus Item</button>
+    <br />
+    <br />
+    <button (click)="calculateNeededFinalGrade()">
+      Calculate Final Grade Needed
+    </button>
+  </div>
+
+  <!-- Step 3: Display the required grade for an A -->
+  <div *ngIf="finalGradeNeeded !== null">
+    <h3>
+      You need a {{ finalGradeNeeded }}% on your final exam to make an A in
+      {{ className }}.
+    </h3>
+  </div>
+</div>
