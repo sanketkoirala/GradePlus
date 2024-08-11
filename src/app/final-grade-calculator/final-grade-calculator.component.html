@@ -1,81 +1,93 @@
 <div class="grade-calculator">
-  <h2>Final Exam Grade Calculator</h2>
+  <h2>🎓Grade+</h2>
+  <h4>Final Exam Grade Calculator</h4>
 
   <!-- Ask for the class name -->
-  <div *ngIf="!classNameSelected">
+  <div *ngIf="!classNameSelected" class="step step-one">
     <label for="className">Enter Class Name:</label>
     <input
       type="text"
       id="className"
       [(ngModel)]="className"
       name="className"
+      placeholder="e.g., Math 101"
       required
     />
-    <button (click)="onClassNameSubmit()">Submit</button>
+    <div class="button-container">
+      <button (click)="onClassNameSubmit()" class="btn-primary">Next</button>
+    </div>
   </div>
 
-  <!-- Add syllabus items -->
-  <div *ngIf="classNameSelected && !finalExamEntered">
+  <!--  Add syllabus items -->
+  <div *ngIf="classNameSelected && !finalExamEntered" class="step step-two">
     <h3>{{ className }}</h3>
+    <button (click)="addSyllabusItem()" class="btn-add">
+      ➕ Add Syllabus Item
+    </button>
 
-    <div *ngFor="let item of syllabusItems; let i = index">
-      <div>
+    <div
+      *ngFor="let item of syllabusItems; let i = index"
+      class="syllabus-item"
+    >
+      <div class="form-group">
         <label for="itemName{{ i }}">Item Name:</label>
         <input
           type="text"
           id="itemName{{ i }}"
           [(ngModel)]="syllabusItems[i].name"
           name="itemName{{ i }}"
+          placeholder="e.g., Homework 1"
           required
         />
       </div>
-      <div>
-        <label for="itemGrade{{ i }}">Grade Received:</label>
+      <div class="form-group">
+        <label for="itemGrade{{ i }}">Grade Received (%):</label>
         <input
           type="number"
           id="itemGrade{{ i }}"
           [(ngModel)]="syllabusItems[i].grade"
           name="itemGrade{{ i }}"
+          placeholder="e.g., 85"
           required
         />
       </div>
-      <div>
+      <div class="form-group">
         <label for="itemWeight{{ i }}">Item Weight (%):</label>
         <input
           type="number"
           id="itemWeight{{ i }}"
           [(ngModel)]="syllabusItems[i].weight"
           name="itemWeight{{ i }}"
+          placeholder="e.g., 20"
           required
         />
-        <br />
-        <br />
       </div>
     </div>
 
-    <div>
+    <div class="form-group">
       <label for="finalExamWeight">Final Exam Weight (%):</label>
       <input
         type="number"
         id="finalExamWeight"
         [(ngModel)]="finalExamWeight"
         name="finalExamWeight"
+        placeholder="e.g., 40"
         required
       />
     </div>
-    <button (click)="addSyllabusItem()">Add Syllabus Item</button>
-    <br />
-    <br />
-    <button (click)="calculateNeededFinalGrade()">
-      Calculate Final Grade Needed
-    </button>
+    <div class="button-container">
+      <button (click)="calculateNeededFinalGrade()" class="btn-primary">
+        Calculate Final Grade Needed
+      </button>
+    </div>
   </div>
 
-  <!-- Step 3: Display the required grade for an A -->
-  <div *ngIf="finalGradeNeeded !== null">
+  <!-- Display the required grade for an A -->
+  <div *ngIf="finalGradeNeeded !== null" class="step step-three">
     <h3>
-      You need a {{ finalGradeNeeded }}% on your final exam to make an A in
-      {{ className }}.
+      You need a <span class="highlight">{{ finalGradeNeeded }}%</span> on your
+      final exam to make an A in <span class="highlight">{{ className }}</span
+      >.
     </h3>
   </div>
 </div>
