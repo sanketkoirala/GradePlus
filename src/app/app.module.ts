@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { FinalGradeCalculatorComponent } from './final-grade-calculator/final-grade-calculator.component';
+import { GpaCalculatorComponent } from './gpa-calculator/gpa-calculator.component';
 
 
 
@@ -12,7 +13,8 @@ import { FinalGradeCalculatorComponent } from './final-grade-calculator/final-gr
 @NgModule({
   declarations: [
     AppComponent,
-    FinalGradeCalculatorComponent
+    FinalGradeCalculatorComponent,
+    GpaCalculatorComponent
 
   ],
   imports: [

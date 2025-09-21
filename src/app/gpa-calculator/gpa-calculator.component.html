@@ -1,0 +1,170 @@
+<div class="calculator-container">
+  <div class="calculator-main">
+    <div class="gpa-calculator">
+      <h2>GPA Calculator</h2>
+
+      <!-- Current Semester Section -->
+  <div class="section">
+    <h3>Current Semester</h3>
+
+    <div class="section-buttons">
+      <button (click)="addCourse()" class="btn-add">
+        ➕ Add Course
+      </button>
+      <button (click)="clearSavedData()" class="btn-clear">
+        🗑️ Clear All Data
+      </button>
+    </div>
+
+    <div *ngFor="let course of currentSemester; let i = index" class="course-item">
+      <div class="form-group">
+        <label for="courseName{{ i }}">Course Name:</label>
+        <input
+          type="text"
+          id="courseName{{ i }}"
+          [(ngModel)]="course.name"
+          name="courseName{{ i }}"
+          placeholder="e.g., Math 101"
+          (input)="onInputChange()"
+          required
+        />
+      </div>
+
+      <div class="form-group">
+        <label for="credits{{ i }}">Credits:</label>
+        <input
+          type="number"
+          id="credits{{ i }}"
+          [(ngModel)]="course.credits"
+          name="credits{{ i }}"
+          min="1"
+          max="6"
+          (input)="onInputChange()"
+          required
+        />
+      </div>
+
+      <div class="form-group">
+        <label for="grade{{ i }}">Grade:</label>
+        <select
+          id="grade{{ i }}"
+          [(ngModel)]="course.grade"
+          name="grade{{ i }}"
+          (change)="onGradeChange(course)"
+          required
+        >
+          <option *ngFor="let grade of gradeScale" [value]="grade.letter">
+            {{ grade.letter }} ({{ grade.points }})
+          </option>
+        </select>
+      </div>
+
+      <button (click)="removeCourse(i)" class="btn-remove">❌</button>
+    </div>
+
+    <div *ngIf="currentSemester.length > 0" class="gpa-display">
+      <h4>Current Semester GPA: <span class="highlight">{{ currentSemesterGPA.toFixed(2) }}</span></h4>
+    </div>
+  </div>
+
+  <!-- CGPA Calculation Section -->
+  <div *ngIf="showCGPASection" class="section cgpa-section">
+    <h3>Calculate New CGPA</h3>
+    <p>Current semester: <strong>{{ currentSemesterGPA.toFixed(2) }} GPA</strong> with <strong>{{ currentSemesterCredits }} credits</strong></p>
+
+    <div class="form-group">
+      <label for="previousCGPA">Your CGPA till last semester:</label>
+      <input
+        type="number"
+        id="previousCGPA"
+        [(ngModel)]="previousCGPA"
+        name="previousCGPA"
+        placeholder="e.g., 3.2"
+        min="0"
+        max="4.0"
+        step="0.01"
+        (input)="onPreviousCGPAChange()"
+        required
+      />
+      <small>Enter your cumulative GPA before this semester (0.0 if this is your first semester)</small>
+    </div>
+
+    <div class="form-group">
+      <label for="previousCredits">Total credits completed till last semester:</label>
+      <input
+        type="number"
+        id="previousCredits"
+        [(ngModel)]="previousTotalCredits"
+        name="previousCredits"
+        placeholder="e.g., 45"
+        min="0"
+        (input)="onPreviousCreditsChange()"
+        required
+      />
+      <small>Enter total credit hours completed before this semester (0 if this is your first semester)</small>
+    </div>
+  </div>
+
+  <!-- New CGPA Display -->
+  <div *ngIf="showCGPASection && (previousTotalCredits >= 0)" class="section result-section">
+    <h3>Your New CGPA</h3>
+    <div class="summary-grid">
+      <div class="summary-item">
+        <label>New CGPA:</label>
+        <span class="highlight large">{{ newCGPA.toFixed(2) }}</span>
+      </div>
+      <div class="summary-item">
+        <label>Total Credits:</label>
+        <span class="highlight">{{ previousTotalCredits + currentSemesterCredits }}</span>
+      </div>
+    </div>
+    </div>
+  </div>
+
+  <!-- Instructions Section -->
+  <div class="instructions-sidebar">
+    <div class="instructions-section">
+      <h3>📚 How to Use the GPA Calculator</h3>
+      <div class="instruction-steps">
+        <div class="step-instruction">
+          <span class="step-number">1</span>
+          <div class="step-content">
+            <strong>Add your current semester courses</strong>
+            <p>Click "Add Course" and enter each course name, credit hours, and letter grade (A, B, C, D, F)</p>
+          </div>
+        </div>
+        <div class="step-instruction">
+          <span class="step-number">2</span>
+          <div class="step-content">
+            <strong>See your current semester GPA</strong>
+            <p>The calculator automatically shows your GPA for this semester as you add courses</p>
+          </div>
+        </div>
+        <div class="step-instruction">
+          <span class="step-number">3</span>
+          <div class="step-content">
+            <strong>Calculate your new cumulative GPA</strong>
+            <p><strong>Previous CGPA:</strong> Your cumulative GPA before this semester (0.0 if first semester)</p>
+            <p><strong>Previous Credits:</strong> Total credits completed before this semester (0 if first semester)</p>
+          </div>
+        </div>
+      </div>
+      <div class="example-box">
+        <h4>💡 Example</h4>
+        <p>Mike is taking 4 courses this semester: Math (3 credits, B), English (4 credits, A), History (3 credits, C), Science (4 credits, B).
+           His current semester GPA would be <strong>3.14</strong>. If his previous CGPA was 3.2 with 45 credits completed,
+           his new CGPA would be <strong>3.18</strong> with 59 total credits.</p>
+      </div>
+      <div class="grade-scale-info">
+        <h4>📊 Grade Scale</h4>
+        <div class="grade-scale-grid">
+          <span><strong>A</strong> = 4.0</span>
+          <span><strong>B</strong> = 3.0</span>
+          <span><strong>C</strong> = 2.0</span>
+          <span><strong>D</strong> = 1.0</span>
+          <span><strong>F</strong> = 0.0</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

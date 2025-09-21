@@ -1,8 +1,9 @@
-<div class="grade-calculator">
-  <h2>🎓Grade+</h2>
-  <h4>Final Exam Grade Calculator</h4>
+<div class="calculator-container">
+  <div class="calculator-main">
+    <div class="grade-calculator">
+      <h2>Final Exam Grade Calculator</h2>
 
-  <!-- Ask for the class name -->
+      <!-- Ask for the class name -->
   <div *ngIf="!classNameSelected" class="step step-one">
     <label for="className">Enter Class Name:</label>
     <input
@@ -18,50 +19,24 @@
     </div>
   </div>
 
-  <!--  Add syllabus items -->
-  <div *ngIf="classNameSelected && !finalExamEntered" class="step step-two">
+  <!-- Simple grade calculation -->
+  <div *ngIf="classNameSelected" class="step step-two">
     <h3>{{ className }}</h3>
-    <button (click)="addSyllabusItem()" class="btn-add">
-      ➕ Add Syllabus Item
-    </button>
 
-    <div
-      *ngFor="let item of syllabusItems; let i = index"
-      class="syllabus-item"
-    >
-      <div class="form-group">
-        <label for="itemName{{ i }}">Item Name:</label>
-        <input
-          type="text"
-          id="itemName{{ i }}"
-          [(ngModel)]="syllabusItems[i].name"
-          name="itemName{{ i }}"
-          placeholder="e.g., Homework 1"
-          required
-        />
-      </div>
-      <div class="form-group">
-        <label for="itemGrade{{ i }}">Grade Received (%):</label>
-        <input
-          type="number"
-          id="itemGrade{{ i }}"
-          [(ngModel)]="syllabusItems[i].grade"
-          name="itemGrade{{ i }}"
-          placeholder="e.g., 85"
-          required
-        />
-      </div>
-      <div class="form-group">
-        <label for="itemWeight{{ i }}">Item Weight (%):</label>
-        <input
-          type="number"
-          id="itemWeight{{ i }}"
-          [(ngModel)]="syllabusItems[i].weight"
-          name="itemWeight{{ i }}"
-          placeholder="e.g., 20"
-          required
-        />
-      </div>
+    <div class="form-group">
+      <label for="currentGrade">Your Current Grade (%):</label>
+      <input
+        type="number"
+        id="currentGrade"
+        [(ngModel)]="currentGrade"
+        name="currentGrade"
+        placeholder="e.g., 85"
+        min="0"
+        max="100"
+        (input)="onInputChange()"
+        required
+      />
+      <small>Enter your current grade percentage in the class</small>
     </div>
 
     <div class="form-group">
@@ -71,23 +46,112 @@
         id="finalExamWeight"
         [(ngModel)]="finalExamWeight"
         name="finalExamWeight"
-        placeholder="e.g., 40"
+        placeholder="e.g., 25"
+        min="1"
+        max="100"
+        (input)="onInputChange()"
         required
       />
+      <small>How much is the final exam worth?</small>
     </div>
+
+    <div class="form-group">
+      <label for="targetGrade">Target Grade (%):</label>
+      <input
+        type="number"
+        id="targetGrade"
+        [(ngModel)]="targetGrade"
+        name="targetGrade"
+        placeholder="90"
+        min="0"
+        max="100"
+        (input)="onInputChange()"
+        required
+      />
+      <small>What grade do you want to achieve? (default: 90% for an A)</small>
+    </div>
+
     <div class="button-container">
       <button (click)="calculateNeededFinalGrade()" class="btn-primary">
-        Calculate Final Grade Needed
+        Calculate Target Grade
+      </button>
+      <button (click)="calculatePassingGrade()" class="btn-passing">
+        Calculate Grade to Pass
+      </button>
+      <button (click)="clearSavedData()" class="btn-clear">
+        Clear All Data
       </button>
     </div>
   </div>
 
-  <!-- Display the required grade for an A -->
+  <!-- Display the required grade for target -->
   <div *ngIf="finalGradeNeeded !== null" class="step step-three">
-    <h3>
+    <h3 *ngIf="finalGradeNeeded <= 100 && finalGradeNeeded >= 0">
       You need a <span class="highlight">{{ finalGradeNeeded }}%</span> on your
-      final exam to make an A in <span class="highlight">{{ className }}</span
-      >.
+      final exam to achieve a <span class="highlight">{{ targetGrade }}%</span> in <span class="highlight">{{ className }}</span>.
     </h3>
+    <h3 *ngIf="finalGradeNeeded > 100" class="impossible">
+      It's impossible to achieve {{ targetGrade }}% in {{ className }}. You would need {{ finalGradeNeeded }}% on the final exam.
+      Consider setting a lower target grade.
+    </h3>
+    <h3 *ngIf="finalGradeNeeded < 0" class="already-achieved">
+      Great news! You've already achieved your target grade of {{ targetGrade }}% in {{ className }}.
+      You can even score 0% on the final and still reach your goal!
+    </h3>
+  </div>
+
+  <!-- Display the required grade to pass -->
+  <div *ngIf="passingGradeNeeded !== null" class="step step-four passing-section">
+    <h3>Grade Needed to Pass</h3>
+    <div *ngIf="passingGradeNeeded <= 100 && passingGradeNeeded >= 0" class="passing-info">
+      <p>To pass {{ className }} with a <strong>60%</strong>, you need:</p>
+      <p class="passing-grade">{{ passingGradeNeeded }}% on your final exam</p>
+    </div>
+    <div *ngIf="passingGradeNeeded > 100" class="passing-impossible">
+      <p>Unfortunately, it's impossible to pass {{ className }} with a 60%. You would need {{ passingGradeNeeded }}% on the final exam.</p>
+    </div>
+    <div *ngIf="passingGradeNeeded < 0" class="already-passing">
+      <p>Great news! You've already secured a passing grade in {{ className }}. You can score 0% on the final and still pass!</p>
+    </div>
+    </div>
+  </div>
+
+  <!-- Instructions Section -->
+  <div class="instructions-sidebar">
+    <div class="instructions-section">
+      <h3>📋 How to Use This Calculator</h3>
+      <div class="instruction-steps">
+        <div class="step-instruction">
+          <span class="step-number">1</span>
+          <div class="step-content">
+            <strong>Enter your class name</strong>
+            <p>Example: "Math 101" or "Biology"</p>
+          </div>
+        </div>
+        <div class="step-instruction">
+          <span class="step-number">2</span>
+          <div class="step-content">
+            <strong>Fill in your current information</strong>
+            <p><strong>Current Grade:</strong> Your grade percentage right now (e.g., 85%)</p>
+            <p><strong>Final Exam Weight:</strong> How much the final is worth (e.g., 25%)</p>
+            <p><strong>Target Grade:</strong> What grade you want overall (e.g., 90% for an A)</p>
+          </div>
+        </div>
+        <div class="step-instruction">
+          <span class="step-number">3</span>
+          <div class="step-content">
+            <strong>Choose your calculation</strong>
+            <p><strong>Calculate Target Grade:</strong> Find out what you need for your desired grade</p>
+            <p><strong>Calculate Grade to Pass:</strong> Find out what you need to get 60% (passing)</p>
+          </div>
+        </div>
+      </div>
+      <div class="example-box">
+        <h4>💡 Example</h4>
+        <p>Sarah has 82% in Chemistry. Her final exam is worth 30% of her grade. She wants an A (90%).
+           The calculator will tell her she needs <strong>106% on the final</strong> - which means it's impossible!
+           But if she just wants to pass (60%), she only needs <strong>10% on the final</strong>.</p>
+      </div>
+    </div>
   </div>
 </div>

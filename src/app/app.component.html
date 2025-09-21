@@ -1,1 +1,15 @@
-<app-final-grade-calculator></app-final-grade-calculator>
+<div class="app-container">
+  <nav class="navbar">
+    <div class="nav-brand">
+      <h1>🎓Grade+</h1>
+    </div>
+    <div class="nav-links">
+      <a routerLink="/final-grade" routerLinkActive="active">Final Grade Calculator</a>
+      <a routerLink="/gpa-calculator" routerLinkActive="active">GPA Calculator</a>
+    </div>
+  </nav>
+
+  <main class="main-content">
+    <router-outlet></router-outlet>
+  </main>
+</div>
